@@ -1,43 +1,41 @@
 [
   {
-    "id": "NODE-4421-US",
-    "path": "/production/aws-east/v4/storage",
-    "status": "Active",
-    "load": 42,
-    "children": []
-  },
-  {
     "id": "NODE-1920-EU",
-    "path": "/archive/legacy/mainframe/db2",
-    "status": "On Leave",
-    "load": 12,
+    "zone": "Western Europe / Frankfurt",
+    "value": "€ 1,240,500.00",
+    "status": "Optimal",
+    "activity": "Last synced 2m ago",
     "children": [
       {
         "id": "CHILD-1920-A",
-        "path": "Incremental Backup Instance 01",
-        "status": "Active",
-        "load": 30
+        "zone": "Virtual Allocation A",
+        "value": "€ 410,200.00",
+        "status": "Reconciled",
+        "activity": ""
       },
       {
         "id": "CHILD-1920-B",
-        "path": "Encryption Gateway Proxy",
-        "status": "Inactive",
-        "load": 0
+        "zone": "Virtual Allocation B",
+        "value": "€ 830,300.00",
+        "status": "Pending",
+        "activity": ""
       }
     ]
   },
   {
-    "id": "NODE-8812-JP",
-    "path": "/sandbox/research/edge-cluster",
-    "status": "Active",
-    "load": 88,
+    "id": "NODE-4482-US",
+    "zone": "North America / Virginia",
+    "value": "$ 2,105,000.00",
+    "status": "Optimal",
+    "activity": "Last synced 14m ago",
     "children": []
   },
   {
-    "id": "NODE-0044-BR",
-    "path": "/infra/firewall/log-aggregator",
-    "status": "Inactive",
-    "load": 100,
+    "id": "NODE-8812-ASIA",
+    "zone": "Asia Pacific / Tokyo",
+    "value": "¥ 450,220,000.00",
+    "status": "Alert",
+    "activity": "Check latency required",
     "children": []
   }
 ]
