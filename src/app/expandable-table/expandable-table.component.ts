@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 
 interface Node {
   id: string;
-  path: string;
+  zone: string;
+  value: string;
   status: string;
-  load: number;
+  activity: string;
   children?: Node[];
 }
 
@@ -28,35 +29,63 @@ export class ExpandableTableComponent implements OnInit {
     this.http.get<Node[]>('assets/data.json').subscribe(d => this.data = d);
   }
 
-  toggleExpand(id: string, event: MouseEvent): void {
+  toggleExpand(id: string, event: Event): void {
     event.stopPropagation();
     this.expandedRows.has(id) ? this.expandedRows.delete(id) : this.expandedRows.add(id);
   }
 
-  toggleSelect(id: string, event: MouseEvent): void {
+  toggleSelect(id: string, event: Event): void {
     event.stopPropagation();
     this.selectedRows.has(id) ? this.selectedRows.delete(id) : this.selectedRows.add(id);
+  }
+
+  toggleParentSelect(row: Node, event: Event): void {
+    event.stopPropagation();
+    const isCurrentlySelected = this.selectedRows.has(row.id);
+
+    if (isCurrentlySelected) {
+      // Deselect parent and all children
+      this.selectedRows.delete(row.id);
+      if (row.children) {
+        row.children.forEach(child => this.selectedRows.delete(child.id));
+      }
+    } else {
+      // Select parent and all children
+      this.selectedRows.add(row.id);
+      if (row.children) {
+        row.children.forEach(child => this.selectedRows.add(child.id));
+      }
+    }
   }
 
   isExpanded(id: string): boolean { return this.expandedRows.has(id); }
   isSelected(id: string): boolean { return this.selectedRows.has(id); }
 
-  get selectedCount(): number { return this.selectedRows.size; }
+  isParentChecked(row: Node): boolean {
+    if (!row.children || row.children.length === 0) {
+      return this.selectedRows.has(row.id);
+    }
+    return this.selectedRows.has(row.id) &&
+      row.children.every(child => this.selectedRows.has(child.id));
+  }
 
+  isParentIndeterminate(row: Node): boolean {
+    if (!row.children || row.children.length === 0) return false;
+    const someSelected = row.children.some(child => this.selectedRows.has(child.id));
+    const allSelected = row.children.every(child => this.selectedRows.has(child.id));
+    return someSelected && !allSelected;
+  }
+
+  get selectedCount(): number { return this.selectedRows.size; }
   clearSelection(): void { this.selectedRows.clear(); }
 
   getStatusClass(status: string): string {
     const map: any = {
-      'Active': 'badge-active',
-      'Inactive': 'badge-inactive',
-      'On Leave': 'badge-leave'
+      'Optimal': 'badge-optimal',
+      'Alert': 'badge-alert',
+      'Reconciled': 'badge-reconciled',
+      'Pending': 'badge-pending'
     };
     return map[status] || '';
-  }
-
-  getLoadClass(load: number): string {
-    if (load >= 80) return 'load-high';
-    if (load >= 40) return 'load-mid';
-    return 'load-low';
   }
 }
