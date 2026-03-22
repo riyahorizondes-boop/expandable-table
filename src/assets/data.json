@@ -1,0 +1,43 @@
+[
+  {
+    "id": "NODE-4421-US",
+    "path": "/production/aws-east/v4/storage",
+    "status": "Active",
+    "load": 42,
+    "children": []
+  },
+  {
+    "id": "NODE-1920-EU",
+    "path": "/archive/legacy/mainframe/db2",
+    "status": "On Leave",
+    "load": 12,
+    "children": [
+      {
+        "id": "CHILD-1920-A",
+        "path": "Incremental Backup Instance 01",
+        "status": "Active",
+        "load": 30
+      },
+      {
+        "id": "CHILD-1920-B",
+        "path": "Encryption Gateway Proxy",
+        "status": "Inactive",
+        "load": 0
+      }
+    ]
+  },
+  {
+    "id": "NODE-8812-JP",
+    "path": "/sandbox/research/edge-cluster",
+    "status": "Active",
+    "load": 88,
+    "children": []
+  },
+  {
+    "id": "NODE-0044-BR",
+    "path": "/infra/firewall/log-aggregator",
+    "status": "Inactive",
+    "load": 100,
+    "children": []
+  }
+]
