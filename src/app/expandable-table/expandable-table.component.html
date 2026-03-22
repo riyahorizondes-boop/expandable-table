@@ -1,0 +1,89 @@
+<div class="wrapper">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Transactions Ledger</h1>
+      <p class="page-sub">Review and reconcile global asset movements across distributed nodes.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-filter">≡ Filter</button>
+      <button class="btn-export">↑ Export</button>
+    </div>
+  </div>
+  <div class="selection-bar" *ngIf="selectedCount > 0">
+    <div class="sel-left">
+      <div class="sel-badge">✓ {{ selectedCount }} row(s) selected</div>
+      <button class="sel-clear" (click)="clearSelection()">Clear</button>
+    </div>
+    <div class="sel-actions">
+      <button class="icon-action">🗑</button>
+      <button class="icon-action">⊞</button>
+      <button class="icon-action">✎</button>
+    </div>
+  </div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-check"></th>
+          <th class="col-arrow"></th>
+          <th>Entity Identity</th>
+          <th>Deployment Zone</th>
+          <th>Asset Value</th>
+          <th>Operational Status</th>
+          <th>Activity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let row of data">
+          <tr class="parent-row" [class.selected]="isSelected(row.id)">
+            <td class="col-check">
+              <input type="checkbox"
+                [checked]="isParentChecked(row)"
+                [indeterminate]="isParentIndeterminate(row)"
+                (click)="toggleParentSelect(row, $event)" />
+            </td>
+            <td class="col-arrow" (click)="toggleExpand(row.id, $event)">
+              <span class="expand-arrow"
+                [class.rotated]="isExpanded(row.id)"
+                *ngIf="row.children && row.children.length > 0">›</span>
+            </td>
+            <td class="entity-id" (click)="toggleSelect(row.id, $event)">{{ row.id }}</td>
+            <td class="zone-cell" (click)="toggleSelect(row.id, $event)">{{ row.zone }}</td>
+            <td class="value-cell" (click)="toggleSelect(row.id, $event)">{{ row.value }}</td>
+            <td (click)="toggleSelect(row.id, $event)">
+              <span class="badge" [ngClass]="getStatusClass(row.status)">{{ row.status }}</span>
+            </td>
+            <td class="activity-cell" (click)="toggleSelect(row.id, $event)">{{ row.activity }}</td>
+          </tr>
+          <tr *ngIf="isExpanded(row.id) && row.children && row.children.length > 0">
+            <td colspan="7" class="child-td">
+              <table class="child-table">
+                <tbody>
+                  <tr *ngFor="let child of row.children"
+                      class="child-row"
+                      [class.selected]="isSelected(child.id)">
+                    <td class="col-check">
+                      <input type="checkbox"
+                        [checked]="isSelected(child.id)"
+                        (click)="toggleSelect(child.id, $event)" />
+                    </td>
+                    <td class="col-arrow"></td>
+                    <td class="child-id" (click)="toggleSelect(child.id, $event)">{{ child.id }}</td>
+                    <td class="child-zone" (click)="toggleSelect(child.id, $event)">{{ child.zone }}</td>
+                    <td class="value-cell" (click)="toggleSelect(child.id, $event)">{{ child.value }}</td>
+                    <td (click)="toggleSelect(child.id, $event)">
+                      <span class="badge" [ngClass]="getStatusClass(child.status)">{{ child.status }}</span>
+                    </td>
+                    <td class="activity-cell" (click)="toggleSelect(child.id, $event)">
+                      <button class="more-btn">⋮</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
